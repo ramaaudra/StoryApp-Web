@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/icons/favicon.png" />
+    <title>Dicoding Story App</title>
+
+    <!-- Web App Manifest for PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#2196F3" />
+    <meta name="description" content="Share your stories with the world" />
+
+    <!-- iOS support -->
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="StoryApp" />
+
+    <!-- Leaflet CSS for maps -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+
+    <!-- Add Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <!-- Simple transition CSS fallback instead of View Transitions API -->
+    <script>
+      // We won't try to load the polyfill as it's not working correctly
+      // Instead, we'll rely on CSS transitions which are already in our styles
+      if (!document.startViewTransition) {
+        console.log("View Transitions API not supported, using CSS fallback");
+        // No need to load a failing polyfill, will use CSS transitions instead
+      }
+    </script>
+
+    <script type="module" src="/src/scripts/index.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="main-header container">
+        <a class="brand-name" href="#/">Dicoding Story</a>
+
+        <!-- Skip to content link for accessibility -->
+        <a href="#main-content" class="skip-link">Skip to content</a>
+
+        <nav
+          id="navigation-drawer"
+          class="navigation-drawer"
+          aria-label="Main navigation"
+        >
+          <ul id="nav-list" class="nav-list">
+            <li><a href="#/">Home</a></li>
+            <li><a href="#/map">Map</a></li>
+            <li><a href="#/add">Add Story</a></li>
+            <li><a href="#/offline">Offline Manager</a></li>
+            <li><a href="#/about">About</a></li>
+            <li><a href="#/login" id="auth-button">Login</a></li>
+            <li>
+              <button id="notification-toggle" class="notification-toggle">
+                Subscribe Notifications
+              </button>
+            </li>
+            <li>
+              <button id="try-notification" class="notification-toggle">
+                Try Notify Me
+              </button>
+            </li>
+          </ul>
+        </nav>
+
+        <button
+          id="drawer-button"
+          class="drawer-button"
+          aria-label="Toggle navigation menu"
+        >
+          ☰
+        </button>
+      </div>
+
+      <!-- Offline indicator -->
+      <div id="offline-indicator" class="offline-indicator">
+        You are offline. Some features may be limited.
+      </div>
+    </header>
+
+    <main id="main-content" class="main-content" tabindex="-1"></main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">Dicoding Story</div>
+          <div class="footer-links">
+            <a href="#/">Home</a>
+            <a href="#/map">Map</a>
+            <a href="#/add">Add Story</a>
+            <a href="#/offline">Offline Manager</a>
+            <a href="#/about">About</a>
+          </div>
+          <p class="footer-copyright" id="footer-copyright">
+            &copy; 2025 Dicoding Story App. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Set current year in footer
+      document.addEventListener("DOMContentLoaded", () => {
+        const footerCopyright = document.getElementById("footer-copyright");
+        if (footerCopyright) {
+          footerCopyright.innerHTML = `&copy; ${new Date().getFullYear()} Dicoding Story App. All rights reserved.`;
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,92 @@
+// Development Service Worker - Simple version without modules
+console.log("[Dev SW] Service Worker starting...");
+
+// Install event
+self.addEventListener("install", (event) => {
+  console.log("[Dev SW] Installing Service Worker...");
+  self.skipWaiting();
+});
+
+// Activate event
+self.addEventListener("activate", (event) => {
+  console.log("[Dev SW] Activating Service Worker...");
+  event.waitUntil(self.clients.claim());
+});
+
+// Push notification handlers
+self.addEventListener("push", function (event) {
+  console.log("[Dev SW] 🔔 Push received: ", event);
+
+  if (!event.data) {
+    console.log("[Dev SW] Push event received, but no data.");
+    return;
+  }
+
+  let notificationData;
+  try {
+    notificationData = event.data.json();
+  } catch (error) {
+    console.error("[Dev SW] Error parsing push data:", error);
+    notificationData = { title: "New Notification", body: event.data.text() };
+  }
+
+  const promiseChain = self.registration.showNotification(
+    notificationData.title || "Story App (Dev)",
+    {
+      body: notificationData.body || "New story added!",
+      icon: "/icons/icon-72x72.png",
+      badge: "/icons/badge-72x72.png",
+      vibrate: [100, 50, 100],
+      data: notificationData.data || {},
+      actions: [
+        {
+          action: "explore",
+          title: "Go to the site",
+        },
+      ],
+    }
+  );
+
+  event.waitUntil(promiseChain);
+});
+
+// Notification click handler
+self.addEventListener("notificationclick", function (event) {
+  console.log("[Dev SW] 🔔 Notification clicked: ", event);
+
+  event.notification.close();
+
+  if (event.action === "explore") {
+    event.waitUntil(clients.openWindow("/"));
+  } else {
+    event.waitUntil(clients.openWindow("/"));
+  }
+});
+
+// Message handler for test notifications
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SHOW_NOTIFICATION") {
+    console.log("[Dev SW] 🔔 Received test notification request:", event.data);
+
+    self.registration.showNotification(
+      event.data.title || "Test Notification (Dev)",
+      {
+        body:
+          event.data.body ||
+          "This is a test notification from the service worker!",
+        icon: "/icons/icon-72x72.png",
+        badge: "/icons/badge-72x72.png",
+        vibrate: [100, 50, 100],
+        data: event.data.data || {},
+        actions: [
+          {
+            action: "explore",
+            title: "Go to the site",
+          },
+        ],
+      }
+    );
+  }
+});
+
+console.log("[Dev SW] 🔔 Service Worker loaded successfully");
